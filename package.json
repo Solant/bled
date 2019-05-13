@@ -11,5 +11,8 @@
   "license": "MPL-2.0",
   "dependencies": {
     "jest": "^24.7.1"
+  },
+  "devDependencies": {
+    "jest-junit": "^6.4.0"
   }
 }

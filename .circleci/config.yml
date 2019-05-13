@@ -19,12 +19,11 @@ jobs: # a collection of steps
           key: dependency-cache-{{ checksum "package.json" }}
           paths:
             - ./node_modules
-      - run: # run tests
+      - run:
           name: test
-          command: npm test
-      - run: # run coverage report
-          name: code-coverage
-          command: npm run coverage
+          command: jest --ci --runInBand --reporters=default --reporters=jest-junit --collectCoverage=true
+          environment:
+            JEST_JUNIT_OUTPUT: "reports/junit/js-test-results.xml"
       - store_artifacts: # for display in Artifacts: https://circleci.com/docs/2.0/artifacts/ 
           path: coverage
           prefix: coverage
