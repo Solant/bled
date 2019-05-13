@@ -1,0 +1,14 @@
+{
+  "name": "bled",
+  "version": "1.0.0",
+  "description": "Brainfuck Language Execution Directives",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "author": "",
+  "license": "MPL-2.0",
+  "dependencies": {
+    "jest": "^24.7.1"
+  }
+}
