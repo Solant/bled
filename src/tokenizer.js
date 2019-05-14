@@ -31,12 +31,14 @@ function tokenize(source) {
         'call',
         'read',
         'msg',
-        'rem',
     ];
     const keywordRegex = new RegExp(`(${keywords.join('|')})`, 'i');
     lexer.addRule(keywordRegex, (value) => {
         result.push({ type: 'Keyword', value });
     });
+
+    lexer.addRule(/rem (.+)\n?/, (value) => result.push({ type: 'Comment', value }));
+    lexer.addRule(/(\/\/|--|#)(.+)\n?/, (value) => result.push({ type: 'Comment', value }));
 
     lexer.addRule(/-?[0-9]+/, (value) => {
         result.push({ type: 'NumberLiteral', value: Number.parseInt(value, 10) });

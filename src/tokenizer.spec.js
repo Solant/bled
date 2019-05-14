@@ -65,3 +65,51 @@ describe('Sources', () => {
         ]);
     });
 });
+
+describe('Comments', () => {
+    test('rem command', () => {
+        const result = tokenize(`
+            var A
+            rem I'm comment
+            var B
+        `.trim());
+
+        expect(result).toEqual([
+            { type: 'Keyword', value: 'var' },
+            { type: 'Symbol', value: 'A' },
+            { type: 'Token', value: 'EOL' },
+
+            { type: 'Comment', value: `I'm comment` },
+
+            { type: 'Keyword', value: 'var' },
+            { type: 'Symbol', value: 'B' },
+        ]);
+
+        expect(tokenize('rem Comment test')).toEqual([{ type: 'Comment', value: 'Comment test' }]);
+    });
+
+    test('prefix', () => {
+        const result = tokenize(`
+            var A
+            //I'm comment
+            --I'm comment
+            #I'm comment
+            var B
+        `.trim());
+
+        expect(result).toEqual([
+            { type: 'Keyword', value: 'var' },
+            { type: 'Symbol', value: 'A' },
+            { type: 'Token', value: 'EOL' },
+
+            { type: 'Comment', value: `I'm comment` },
+            { type: 'Comment', value: `I'm comment` },
+            { type: 'Comment', value: `I'm comment` },
+
+            { type: 'Keyword', value: 'var' },
+            { type: 'Symbol', value: 'B' },
+        ]);
+
+        expect(tokenize('//Comment test')).toEqual([{ type: 'Comment', value: 'Comment test' }]);
+    });
+});

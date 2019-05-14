@@ -18,7 +18,7 @@ class Lexer {
                 const match = this.rules[i].rule.exec(this.source.substring(this.index));
 
                 if (match !== null && match.index === 0) {
-                    const lexemBody = match[1] || match[0];
+                    const lexemBody = match[match.length - 1];
                     this.rules[i].callback.call(undefined, lexemBody);
                     this.index += match[0].length;
                 }
