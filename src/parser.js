@@ -13,12 +13,20 @@ module.exports = function parse(tokenList) {
         const token = tokenList[current];
         const { type, value } = token;
 
-        // Simple values
-        if (['NumberLiteral', 'StringLiteral', 'CharLiteral', 'StringLiteral'].includes(type)) {
+        // Simple nodes
+        const literals = [
+            'NumberLiteral',
+            'StringLiteral',
+            'CharLiteral',
+            'StringLiteral',
+            'Comment',
+        ];
+        if (literals.includes(type)) {
             current++;
             return { type, value };
         }
 
+        // Variables
         if (type === 'Symbol') {
             current++;
             return { type, value: normalize(value) };
@@ -34,11 +42,15 @@ module.exports = function parse(tokenList) {
             current++;
 
             let currentToken = tokenList[current];
-            while (currentToken && currentToken.type !== 'Token' && currentToken.value !== 'EOL') {
+            const isEol = t => t.type === 'Token' && t.value === 'EOL';
+            const isComment = t => t.type === 'Comment';
+            while (currentToken && !(isEol(currentToken) || isComment(currentToken))) {
                 node.arguments.push(walk());
                 currentToken = tokenList[current];
             }
-            current++;
+            if (!currentToken || isEol(currentToken)) {
+                current++;
+            }
 
             return node;
         }

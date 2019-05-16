@@ -26,4 +26,33 @@ describe('Parser', function () {
             },
         ])
     });
+
+    test('comments', () => {
+        const ast = makeAst(`
+            vAr a B # Test 1
+            rem Test 2
+            iNc b a
+        `);
+
+        expect(ast.body).toEqual([
+            {
+                type: 'CallExpression',
+                name: 'var',
+                arguments: [{ type: 'Symbol', value: 'a' }, { type: 'Symbol', value: 'b' }],
+            },
+            {
+                type: 'Comment',
+                value: ' Test 1',
+            },
+            {
+                type: 'Comment',
+                value: 'Test 2',
+            },
+            {
+                type: 'CallExpression',
+                name: 'inc',
+                arguments: [{ type: 'Symbol', value: 'b' }, { type: 'Symbol', value: 'a' }],
+            },
+        ])
+    });
 });
